@@ -147,7 +147,7 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
             font-weight: 700;
-            letter-spacing: 6px;
+            letter-spacing: 3px;
             text-align: center;
             color: #333;
             margin-bottom: 12px;
@@ -1241,14 +1241,14 @@
 
     <div class="app-container">
 
-        <!-- LAYAR VERIFIKASI PIN (4 DIGIT TERAKHIR WA) -->
+        <!-- LAYAR VERIFIKASI PIN (# + 4 DIGIT TERAKHIR WA) -->
         <div id="private-gate">
             <div class="gate-box">
                 <h2 class="gate-title">Private Invitation</h2>
                 <p id="gate-subtitle" class="gate-subtitle">
-                    Masukkan <strong>4 digit terakhir</strong> nomor WhatsApp Anda untuk membuka undangan.
+                    Masukkan <strong>#</strong> diikuti <strong>4 digit terakhir</strong> nomor WhatsApp Anda (contoh: <strong>#0123</strong>) untuk membuka undangan.
                 </p>
-                <input type="tel" id="gate-pin-input" class="gate-input" placeholder="••••" maxlength="4" inputmode="numeric" autocomplete="off">
+                <input type="text" id="gate-pin-input" class="gate-input" placeholder="#0123" maxlength="5" autocomplete="off">
                 <button type="button" id="gate-verify-btn" class="gate-btn" onclick="verifikasiTamu()">Buka Undangan</button>
                 <div id="gate-error-msg" class="gate-error"></div>
             </div>
@@ -1510,7 +1510,7 @@
     <script>
         const TARGET_COUNTDOWN = "2026-12-06T00:00:00"; 
         
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw8yawmYtXHpDI1g2xt9CbKbtHayFNIzQdKwpbp2JhiLU7k7r0RyLsiEMeMdbm_uunF/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwnCVLeiQrxw19oDnEsq09P1eh6WXxLJ5hTZeT5ECFS9VO9b8t3T4S97Ewj5oh9NQkl/exec";
         let dataUcapan = [];
         let butuhNoLengkap = false;
         
@@ -1609,14 +1609,15 @@
                 }
                 queryParam = `wa=${encodeURIComponent(waNorm)}`;
             } else {
-                if (cleanDigits.length !== 4) {
+                const hasHash = rawVal.startsWith('#');
+                if (!hasHash || cleanDigits.length !== 4) {
                     if (errEl) {
-                        errEl.innerText = "Masukkan tepat 4 digit terakhir nomor WhatsApp Anda.";
+                        errEl.innerText = "Gunakan format # lalu 4 digit terakhir no WA, contoh: #0123";
                         errEl.style.display = "block";
                     }
                     return;
                 }
-                queryParam = `pin=${encodeURIComponent(cleanDigits)}`;
+                queryParam = `pin=${encodeURIComponent('#' + cleanDigits)}`;
             }
 
             if (btnEl) {
@@ -1665,7 +1666,7 @@
                 } else {
                     localStorage.removeItem('inv_verified_wa');
                     if (errEl) {
-                        errEl.innerText = (result && result.message) || "4 digit terakhir nomor WhatsApp tidak terdaftar.";
+                        errEl.innerText = (result && result.message) || "Kode # dan 4 digit terakhir nomor WhatsApp tidak terdaftar.";
                         errEl.style.display = "block";
                     }
                 }
