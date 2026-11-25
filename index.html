@@ -145,10 +145,18 @@
             border: 1.5px solid #fcc3d5;
             border-radius: 8px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 6px;
             text-align: center;
             color: #333;
             margin-bottom: 12px;
+        }
+
+        .gate-input.full-wa-mode {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
 
         .gate-input:focus {
@@ -190,7 +198,7 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: #feffed;
-            display: none; /* Ditampilkan setelah lolos verifikasi WA */
+            display: none;
             flex-direction: column; 
             justify-content: flex-start; 
             align-items: center; 
@@ -458,7 +466,6 @@
             align-items: center;
         }
 
-        /* Setting Gambar Elemen 9:16 Pas Mentok 1 Halaman Tanpa Mengubah Posisi Sisi */
         .png-asset { 
             position: relative; 
             width: 100%;
@@ -472,7 +479,6 @@
             transition: opacity 2.2s ease-out, transform 2.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* Override Khusus Halaman 2 untuk Countdown */
         #page2 {
             position: relative;
             width: 100%;
@@ -547,7 +553,6 @@
             color: var(--cd-label-color); 
         }
 
-        /* Halaman Kereta */
         #page5b {
             min-height: 15vh;
             height: 15vh;
@@ -596,7 +601,6 @@
             align-items: center;
         } 
         
-        /* HALAMAN 10: GALERI SLIDE (1:1 RATIO) */
         #page10 { 
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -608,7 +612,6 @@
             align-items: center;
         }
         
-        /* HALAMAN 11 & 12: AMPLOP & RSVP */
         #page11 { 
             height: auto; 
             min-height: 100vh; 
@@ -684,7 +687,6 @@
             position: relative; z-index: 4; background-color: #feffed;
         }
 
-        /* --- FOTO GRID --- */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -723,7 +725,6 @@
         .grid-delay-3 { transition-delay: 1.0s !important; }
         .grid-delay-4 { transition-delay: 1.4s !important; }
 
-        /* --- DESAIN GALERI SLIDE FEEDS INSTAGRAM --- */
         .gallery-frame {
             position: absolute;
             top: 0;
@@ -809,7 +810,6 @@
         .btn-left { left: 8px; }   
         .btn-right { right: 8px; } 
 
-        /* --- LIGHTBOX & DOWNLOAD --- */
         .lightbox {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 200; display: none;
@@ -869,7 +869,6 @@
             object-position: center;
         }
 
-        /* --- STYLES ANIMASI HALUS & PELAN (2.2s) --- */
         .anim-top      { transform: translateY(-60px); }
         .anim-bottom   { transform: translateY(60px); }
         .anim-left     { transform: translateX(-30px); }
@@ -886,7 +885,6 @@
             transform: scale(1) translateY(0) translateX(0) !important;
         }
 
-        /* ANIMASI BERGOYANG HALAMAN TERAKHIR */
         @keyframes customShake {
             0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
             10%, 30%, 50%, 70%, 90% { transform: translateY(0) rotate(-3deg) scale(1); }
@@ -940,7 +938,6 @@
         .p6-delay-1 { transition-delay: 0.3s; }
         .p6-delay-2 { transition-delay: 0.6s; }
 
-        /* --- STYLES AMPLOP DIGITAL --- */
         .gift-container {
             position: relative;
             width: 80%;
@@ -1032,7 +1029,6 @@
             transform: translateY(0) !important;
         }
 
-        /* --- RSVP FORM & COMMENTS --- */
         .rsvp-form-container {
             width: 85%;
             max-width: 420px;
@@ -1196,7 +1192,6 @@
             margin-top: 10px;
         }
 
-        /* --- PERBAIKAN TAMPILAN LAPTOP / MONITOR BESAR --- */
         @media screen and (min-width: 768px) {
             body, html {
                 overflow: hidden !important;
@@ -1246,15 +1241,15 @@
 
     <div class="app-container">
 
-        <!-- LAYAR VERIFIKASI PRIVATE (NOMOR WA TERDAFTAR) -->
+        <!-- LAYAR VERIFIKASI PIN (4 DIGIT TERAKHIR WA) -->
         <div id="private-gate">
             <div class="gate-box">
                 <h2 class="gate-title">Private Invitation</h2>
-                <p class="gate-subtitle">
-                    Undangan ini bersifat eksklusif. Silakan masukkan nomor WhatsApp Anda yang terdaftar untuk membuka undangan.
+                <p id="gate-subtitle" class="gate-subtitle">
+                    Masukkan <strong>4 digit terakhir</strong> nomor WhatsApp Anda yang terdaftar untuk membuka undangan.
                 </p>
-                <input type="tel" id="gate-wa-input" class="gate-input" placeholder="Contoh: 081234567890" autocomplete="tel">
-                <button type="button" id="gate-verify-btn" class="gate-btn" onclick="verifikasiTamu()">Verifikasi Akses</button>
+                <input type="tel" id="gate-pin-input" class="gate-input" placeholder="••••" maxlength="4" inputmode="numeric" autocomplete="off">
+                <button type="button" id="gate-verify-btn" class="gate-btn" onclick="verifikasiTamu()">Buka Undangan</button>
                 <div id="gate-error-msg" class="gate-error"></div>
             </div>
         </div>
@@ -1515,8 +1510,9 @@
     <script>
         const TARGET_COUNTDOWN = "2026-12-06T00:00:00"; 
         
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyjieO7EtW01L3TtgUQ6vOmkxtivRZ0I6wu7OdvW8Uo-ltaEpxsnMKSr8-odoLuCpLQ/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwnCVLeiQrxw19oDnEsq09P1eh6WXxLJ5hTZeT5ECFS9VO9b8t3T4S97Ewj5oh9NQkl/exec";
         let dataUcapan = [];
+        let butuhNoLengkap = false;
         
         let ucapanCurrentPage = 1;
         const ucapanPerPage = 5;
@@ -1528,7 +1524,6 @@
             );
         }
 
-        // --- SISTEM PRIVATE ACCESS & DEVICE LOCK ---
         function getDeviceId() {
             let devId = localStorage.getItem('inv_device_id');
             if (!devId) {
@@ -1539,12 +1534,10 @@
         }
 
         function normalisasiWA(nomor) {
-            let clean = String(nomor).replace(/\D/g, '');
-            if (clean.startsWith('0')) {
-                clean = '62' + clean.substring(1);
-            } else if (clean.startsWith('8')) {
-                clean = '62' + clean;
-            }
+            let clean = String(nomor || '').replace(/\D/g, '');
+            if (!clean) return '';
+            if (clean.startsWith('0')) return '62' + clean.substring(1);
+            if (clean.startsWith('8')) return '62' + clean;
             return clean;
         }
 
@@ -1575,20 +1568,55 @@
             }, 1000);
         }
 
+        function aktifkanModeNoLengkap(pesan) {
+            butuhNoLengkap = true;
+            const inputEl = document.getElementById('gate-pin-input');
+            const subEl = document.getElementById('gate-subtitle');
+            const errEl = document.getElementById('gate-error-msg');
+
+            if (inputEl) {
+                inputEl.value = '';
+                inputEl.maxLength = 15;
+                inputEl.placeholder = 'Contoh: 081234567890';
+                inputEl.classList.add('full-wa-mode');
+                inputEl.focus();
+            }
+            if (subEl) {
+                subEl.innerHTML = pesan || 'Masukkan <strong>nomor WhatsApp lengkap</strong> Anda untuk memastikan akun.';
+            }
+            if (errEl) errEl.style.display = 'none';
+        }
+
         function verifikasiTamu(autoWa = null) {
-            const inputEl = document.getElementById('gate-wa-input');
+            const inputEl = document.getElementById('gate-pin-input');
             const btnEl = document.getElementById('gate-verify-btn');
             const errEl = document.getElementById('gate-error-msg');
 
-            const rawWa = autoWa || (inputEl ? inputEl.value.trim() : '');
-            const waClean = normalisasiWA(rawWa);
+            const rawVal = autoWa || (inputEl ? inputEl.value.trim() : '');
+            const cleanDigits = String(rawVal || '').replace(/\D/g, '');
 
-            if (!waClean || waClean.length < 9) {
-                if (errEl) {
-                    errEl.innerText = "Masukkan nomor WhatsApp yang valid.";
-                    errEl.style.display = "block";
+            let queryParam = '';
+            if (autoWa) {
+                queryParam = `wa=${encodeURIComponent(normalisasiWA(autoWa))}`;
+            } else if (butuhNoLengkap) {
+                const waNorm = normalisasiWA(cleanDigits);
+                if (!waNorm || waNorm.length < 9) {
+                    if (errEl) {
+                        errEl.innerText = "Masukkan nomor WhatsApp lengkap yang valid.";
+                        errEl.style.display = "block";
+                    }
+                    return;
                 }
-                return;
+                queryParam = `wa=${encodeURIComponent(waNorm)}`;
+            } else {
+                if (cleanDigits.length !== 4) {
+                    if (errEl) {
+                        errEl.innerText = "Masukkan tepat 4 digit terakhir nomor WhatsApp Anda.";
+                        errEl.style.display = "block";
+                    }
+                    return;
+                }
+                queryParam = `pin=${encodeURIComponent(cleanDigits)}`;
             }
 
             if (btnEl) {
@@ -1598,39 +1626,72 @@
             if (errEl) errEl.style.display = "none";
 
             const deviceId = getDeviceId();
+            const callbackName = 'cbVerify_' + Date.now();
+            const oldScript = document.getElementById('jsonp-verify-script');
+            if (oldScript) oldScript.remove();
 
-            fetch(`${WEB_APP_URL}?action=verify&wa=${encodeURIComponent(waClean)}&device=${encodeURIComponent(deviceId)}`)
-                .then(res => res.json())
-                .then(result => {
-                    if (result.status === "ok") {
-                        localStorage.setItem('inv_verified_wa', waClean);
-                        localStorage.setItem('inv_verified_name', result.nama || '');
-                        tampilkanCoverSetelahVerifikasi(result.nama);
-                    } else {
-                        localStorage.removeItem('inv_verified_wa');
-                        if (errEl) {
-                            errEl.innerText = result.message || "Akses ditolak. Nomor tidak terdaftar atau sudah digunakan di perangkat lain.";
-                            errEl.style.display = "block";
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.error("Error verifikasi:", err);
+            let selesai = false;
+            const timeoutId = setTimeout(() => {
+                if (selesai) return;
+                selesai = true;
+                delete window[callbackName];
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.innerText = "Buka Undangan";
+                }
+                if (errEl) {
+                    errEl.innerText = "Waktu habis saat menghubungi server. Coba lagi ya.";
+                    errEl.style.display = "block";
+                }
+            }, 12000);
+
+            window[callbackName] = function(result) {
+                if (selesai) return;
+                selesai = true;
+                clearTimeout(timeoutId);
+                delete window[callbackName];
+
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.innerText = "Buka Undangan";
+                }
+
+                if (result && result.status === "ok") {
+                    localStorage.setItem('inv_verified_wa', result.wa || normalisasiWA(cleanDigits));
+                    localStorage.setItem('inv_verified_name', result.nama || '');
+                    tampilkanCoverSetelahVerifikasi(result.nama);
+                } else if (result && result.status === "need_full_wa") {
+                    aktifkanModeNoLengkap(result.message);
+                } else {
+                    localStorage.removeItem('inv_verified_wa');
                     if (errEl) {
-                        errEl.innerText = "Gagal terhubung ke server. Periksa koneksi internet Anda.";
+                        errEl.innerText = (result && result.message) || "4 digit terakhir nomor WhatsApp tidak terdaftar.";
                         errEl.style.display = "block";
                     }
-                })
-                .finally(() => {
-                    if (btnEl) {
-                        btnEl.disabled = false;
-                        btnEl.innerText = "Verifikasi Akses";
-                    }
-                });
+                }
+            };
+
+            const script = document.createElement('script');
+            script.id = 'jsonp-verify-script';
+            script.src = `${WEB_APP_URL}?action=verify&${queryParam}&device=${encodeURIComponent(deviceId)}&callback=${callbackName}`;
+            script.onerror = function() {
+                if (selesai) return;
+                selesai = true;
+                clearTimeout(timeoutId);
+                delete window[callbackName];
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.innerText = "Buka Undangan";
+                }
+                if (errEl) {
+                    errEl.innerText = "Gagal terhubung ke server. Pastikan akses Apps Script sudah Anyone.";
+                    errEl.style.display = "block";
+                }
+            };
+            document.body.appendChild(script);
         }
 
-        // Enter key pada input WA
-        document.getElementById('gate-wa-input')?.addEventListener('keypress', function(e) {
+        document.getElementById('gate-pin-input')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') verifikasiTamu();
         });
 
@@ -1638,11 +1699,8 @@
             initCountdown();
             ambilDataUcapan();
 
-            // Cek apakah perangkat ini sudah pernah diverifikasi sebelumnya
             const savedWa = localStorage.getItem('inv_verified_wa');
             if (savedWa) {
-                const inputEl = document.getElementById('gate-wa-input');
-                if (inputEl) inputEl.value = savedWa;
                 verifikasiTamu(savedWa);
             }
         });
@@ -1951,10 +2009,12 @@
             btnSubmit.disabled = true;
             btnSubmit.innerText = "Mengirim...";
 
+            const waTerverifikasi = localStorage.getItem('inv_verified_wa') || '';
             const formData = new FormData();
             formData.append('nama', nama);
             formData.append('status', status);
             formData.append('teks', teks);
+            formData.append('wa', waTerverifikasi);
 
             fetch(WEB_APP_URL, {
                 method: 'POST',
